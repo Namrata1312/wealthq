@@ -824,7 +824,7 @@ Return ONLY the final WhatsApp-ready message. No bullet points. No headers. Shor
     const text  = input.value.trim();
     if (!text) return;
 
-    if (!BACKEND_URL || BACKEND_URL === 'YOUR_RENDER_URL_HERE') {
+    if (!BACKEND_URL || BACKEND_URL === 'https://wealthq.onrender.com') {
       showToast('Backend not configured yet');
       return;
     }
