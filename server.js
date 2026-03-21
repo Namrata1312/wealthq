@@ -83,7 +83,24 @@ app.post('/chat', async (req, res) => {
       return res.status(500).json({ error: data.error.message });
     }
 
-    res.json({ reply: data.content[0].text });
+    const reply = data.content[0].text;
+
+    // Log to Google Sheets if configured (non-blocking)
+    if (process.env.GOOGLE_SHEETS_URL) {
+      fetch(process.env.GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId:   req.body.sessionId,
+          testerName:  req.body.testerName  || 'anonymous',
+          timestamp:   new Date().toISOString(),
+          userMessage: messages[messages.length - 1].content,
+          botReply:    reply
+        })
+      }).catch(err => console.warn('Sheets logging failed:', err));
+    }
+
+    res.json({ reply });
 
   } catch (err) {
     console.error('API error:', err);
