@@ -659,7 +659,7 @@ Return ONLY the final WhatsApp-ready message. No bullet points. No headers. Shor
   const BACKEND_URL      = 'https://wealthq.onrender.com';  // ← e.g. https://wealthq.onrender.com
 
   let config = {
-    sheetsUrl: OWNER_SHEETS_URL,
+    sheetsUrl: '',
     testerName: ''
   };
 
@@ -824,7 +824,7 @@ Return ONLY the final WhatsApp-ready message. No bullet points. No headers. Shor
     const text  = input.value.trim();
     if (!text) return;
 
-    if (!BACKEND_URL || BACKEND_URL === 'https://wealthq.onrender.com') {
+if (!BACKEND_URL) {
       showToast('Backend not configured yet');
       return;
     }
