@@ -112,3 +112,13 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`WealthQ backend running on port ${PORT}`);
 });
+
+// Keep server warm on Render free tier - ping every 14 minutes
+const RENDER_URL = process.env.RENDER_EXTERNAL_URL;
+if (RENDER_URL) {
+  setInterval(() => {
+    fetch(RENDER_URL + '/')
+      .then(() => console.log('Keep-alive ping sent'))
+      .catch(err => console.warn('Keep-alive ping failed:', err));
+  }, 14 * 60 * 1000);
+}
