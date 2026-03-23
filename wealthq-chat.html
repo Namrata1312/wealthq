@@ -15,13 +15,21 @@
     body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); height:100dvh; display:flex; flex-direction:column; align-items:center; overflow:hidden; }
     body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; }
     .shell { position:relative; z-index:1; width:100%; max-width:720px; height:100dvh; display:flex; flex-direction:column; }
-    header { padding:20px 24px 16px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); flex-shrink:0; }
-    .logo-mark { width:36px; height:36px; border-radius:50%; border:1.5px solid var(--gold); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:15px; color:var(--gold); letter-spacing:-0.5px; }
+    header { padding:16px 20px 14px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .logo-mark { width:36px; height:36px; border-radius:50%; border:1.5px solid var(--gold); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:15px; color:var(--gold); letter-spacing:-0.5px; flex-shrink:0; }
     .brand h1 { font-family:'Playfair Display',serif; font-size:17px; font-weight:600; color:var(--text); letter-spacing:0.2px; }
     .brand p { font-size:11px; color:var(--text-dim); font-weight:300; margin-top:1px; }
-    .status-dot { margin-left:auto; display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-dim); }
+    .header-right { margin-left:auto; display:flex; align-items:center; gap:10px; }
+    .status-dot { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-dim); }
     .dot { width:6px; height:6px; border-radius:50%; background:#3ecf8e; box-shadow:0 0 6px #3ecf8e88; animation:pulse 2.5s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* Language toggle */
+    .lang-toggle { display:flex; align-items:center; background:var(--surface2); border:1px solid var(--border); border-radius:100px; padding:3px; gap:2px; }
+    .lang-btn { padding:4px 9px; border-radius:100px; border:none; background:transparent; color:var(--text-dim); font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+    .lang-btn.active { background:var(--gold); color:#0f0f0f; }
+    .lang-btn:hover:not(.active) { color:var(--text); }
+
     #chat { flex:1; overflow-y:auto; padding:20px 16px; display:flex; flex-direction:column; gap:16px; scroll-behavior:smooth; }
     #chat::-webkit-scrollbar { width:4px; }
     #chat::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
@@ -78,6 +86,15 @@
     .field input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-family:'DM Sans',sans-serif; font-size:16px; color:var(--text); outline:none; transition:border-color 0.2s; }
     .field input:focus { border-color:var(--gold-dim); }
     .field .hint { font-size:11px; color:var(--text-dim); margin-top:5px; opacity:0.7; }
+
+    /* Language picker in modal */
+    .lang-picker { display:flex; gap:8px; margin-top:4px; }
+    .lang-option { flex:1; padding:10px 8px; border:1px solid var(--border); border-radius:10px; background:var(--surface2); color:var(--text-dim); font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; text-align:center; transition:all 0.2s; }
+    .lang-option:hover { border-color:var(--gold-dim); color:var(--text); }
+    .lang-option.selected { border-color:var(--gold); color:var(--gold); background:var(--user-bg); }
+    .lang-option .lang-label { font-weight:500; display:block; }
+    .lang-option .lang-sub { font-size:10px; opacity:0.6; display:block; margin-top:2px; }
+
     .modal-actions { display:flex; gap:10px; margin-top:20px; }
     .btn-primary { flex:1; padding:11px; background:var(--gold); color:#0f0f0f; border:none; border-radius:9px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; cursor:pointer; transition:background 0.2s; }
     .btn-primary:hover { background:#e0bb62; }
@@ -86,20 +103,19 @@
     #toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--surface2); border:1px solid var(--border); border-radius:100px; padding:8px 18px; font-size:12px; color:var(--text-dim); opacity:0; transition:all 0.3s ease; pointer-events:none; white-space:nowrap; z-index:50; }
     #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
     @media (max-width:600px) {
-      header { padding:14px 16px 12px; }
+      header { padding:12px 14px 10px; gap:8px; }
       .logo-mark { width:30px; height:30px; font-size:13px; }
-      .brand h1 { font-size:15px; }
-      .brand p { font-size:10px; }
+      .brand h1 { font-size:14px; }
+      .brand p { display:none; }
+      .lang-btn { padding:3px 7px; font-size:10px; }
       .bubble { max-width:92%; font-size:13.5px; }
       #chat { padding:14px 12px; gap:12px; }
-      .input-area { padding:10px 12px 16px; }
+      .input-area { padding:10px 12px 14px; }
       .input-row { padding:8px 10px 8px 14px; }
       .send-btn,.mic-btn,.attach-btn { width:32px; height:32px; }
       .modal-box { padding:22px 20px 18px; }
-      .suggestion-chips { gap:6px; }
-      .chip { font-size:11px; padding:6px 11px; }
-      #empty-state h2 { font-size:17px; }
-      #empty-state p { font-size:12px; }
+      .lang-picker { gap:6px; }
+      .lang-option { font-size:12px; padding:8px 6px; }
     }
   </style>
 </head>
@@ -107,12 +123,29 @@
 
 <div id="config-modal">
   <div class="modal-box">
-    <h2>Welcome to WealthQ</h2>
-    <p>Before we start - what should I call you?</p>
+    <h2 id="modal-title">Welcome to WealthQ</h2>
+    <p id="modal-desc">Before we start - what should I call you?</p>
     <div class="field">
-      <label>Your Name</label>
+      <label id="modal-name-label">Your Name</label>
       <input type="text" id="cfg-tester" placeholder="e.g. Priya" autocomplete="given-name"/>
-      <div class="hint">Only used to label your session in logs</div>
+      <div class="hint" id="modal-name-hint">Only used to label your session in logs</div>
+    </div>
+    <div class="field">
+      <label id="modal-lang-label">Preferred Language</label>
+      <div class="lang-picker">
+        <div class="lang-option selected" data-lang="english" onclick="selectLang(this)">
+          <span class="lang-label">English</span>
+          <span class="lang-sub">Default</span>
+        </div>
+        <div class="lang-option" data-lang="hindi" onclick="selectLang(this)">
+          <span class="lang-label">Hindi</span>
+          <span class="lang-sub">हिंदी</span>
+        </div>
+        <div class="lang-option" data-lang="hinglish" onclick="selectLang(this)">
+          <span class="lang-label">Hinglish</span>
+          <span class="lang-sub">Mix</span>
+        </div>
+      </div>
     </div>
     <div class="modal-actions">
       <button class="btn-secondary" id="skip-btn">Skip</button>
@@ -126,20 +159,27 @@
     <div class="logo-mark">W</div>
     <div class="brand">
       <h1>WealthQ</h1>
-      <p>Your financial thinking partner</p>
+      <p id="brand-tagline">Your financial thinking partner</p>
     </div>
-    <div class="status-dot">
-      <div class="dot"></div>
-      <span>Live</span>
+    <div class="header-right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="english" onclick="switchLang('english')">EN</button>
+        <button class="lang-btn" data-lang="hindi" onclick="switchLang('hindi')">HI</button>
+        <button class="lang-btn" data-lang="hinglish" onclick="switchLang('hinglish')">MIX</button>
+      </div>
+      <div class="status-dot">
+        <div class="dot"></div>
+        <span id="status-label">Live</span>
+      </div>
     </div>
   </header>
 
   <div id="chat">
     <div id="empty-state">
       <div class="icon">&#8377;</div>
-      <h2>Let's talk about your money</h2>
-      <p>Share your portfolio, a screenshot, or just describe what you've got - and I'll tell you what I see.</p>
-      <div class="suggestion-chips">
+      <h2 id="empty-title">Let's talk about your money</h2>
+      <p id="empty-desc">Share your portfolio, a screenshot, or just describe what you've got - and I'll tell you what I see.</p>
+      <div class="suggestion-chips" id="chips-container">
         <div class="chip" onclick="useChip(this)">I have 6 mutual funds</div>
         <div class="chip" onclick="useChip(this)">Is my FD worth it?</div>
         <div class="chip" onclick="useChip(this)">Old vs new tax regime</div>
@@ -155,7 +195,7 @@
         <span id="file-chip-name"></span>
         <button class="file-remove" onclick="removeFile()">x</button>
       </div>
-      <div class="file-session-note">Available this session only - re-attach after refresh</div>
+      <div class="file-session-note" id="file-session-note">Available this session only - re-attach after refresh</div>
     </div>
     <div class="input-row">
       <button class="attach-btn" onclick="document.getElementById('file-input').click()" title="Attach file">
@@ -180,7 +220,7 @@
         </svg>
       </button>
     </div>
-    <div class="input-hint">PDF / CSV / Photos only - Not financial advice</div>
+    <div class="input-hint" id="input-hint">PDF / CSV / Photos only - Not financial advice</div>
   </div>
 </div>
 
@@ -188,12 +228,102 @@
 
 <script>
 var BACKEND_URL = 'https://wealthq.onrender.com';
-var history = [];
+
+var chatHistory = [];
 var pendingFile = null;
 var isListening = false;
 var recognition = null;
-var config = { testerName: '', sheetsUrl: '' };
+var selectedLangInModal = 'english';
+var config = { testerName: '', sheetsUrl: '', language: 'english' };
 
+// ---- LANGUAGE STRINGS ----
+var STRINGS = {
+  english: {
+    modalTitle: 'Welcome to WealthQ',
+    modalDesc: 'Before we start - what should I call you?',
+    modalNameLabel: 'Your Name',
+    modalNameHint: 'Only used to label your session in logs',
+    modalLangLabel: 'Preferred Language',
+    skipBtn: 'Skip',
+    startBtn: 'Start chatting',
+    tagline: 'Your financial thinking partner',
+    emptyTitle: "Let's talk about your money",
+    emptyDesc: "Share your portfolio, a screenshot, or just describe what you've got - and I'll tell you what I see.",
+    chips: ['I have 6 mutual funds', 'Is my FD worth it?', 'Old vs new tax regime', 'Review my portfolio'],
+    placeholder: 'Tell me about your portfolio...',
+    listening: 'Listening...',
+    hint: 'PDF / CSV / Photos only - Not financial advice',
+    fileNote: 'Available this session only - re-attach after refresh',
+    statusLabel: 'Live',
+    toastNoBackend: 'Backend not configured',
+    toastFileType: 'Only PDF, CSV, and images are supported',
+    toastFileSize: 'File too large - please keep it under 10MB',
+    toastMicError: 'Mic error: ',
+    toastMicUnsupported: 'Speech not supported. Try Chrome.',
+    errorServer: 'Could not reach the server. Check your connection.',
+    langChanged: 'Language changed to English',
+    systemLangNote: 'Always respond in English.'
+  },
+  hindi: {
+    modalTitle: 'WealthQ में आपका स्वागत है',
+    modalDesc: 'शुरू करने से पहले - मैं आपको क्या बुलाऊं?',
+    modalNameLabel: 'आपका नाम',
+    modalNameHint: 'सिर्फ सेशन ट्रैक करने के लिए',
+    modalLangLabel: 'पसंदीदा भाषा',
+    skipBtn: 'छोड़ दें',
+    startBtn: 'बात शुरू करें',
+    tagline: 'आपका वित्तीय साथी',
+    emptyTitle: 'अपने पैसों के बारे में बात करें',
+    emptyDesc: 'अपना पोर्टफोलियो शेयर करें, स्क्रीनशॉट भेजें, या बस बता दें क्या है - मैं देखूंगा।',
+    chips: ['मेरे पास 6 म्यूचुअल फंड हैं', 'क्या मेरा FD सही है?', 'पुराना बनाम नया टैक्स रिजीम', 'मेरा पोर्टफोलियो देखें'],
+    placeholder: 'अपने पोर्टफोलियो के बारे में बताएं...',
+    listening: 'सुन रहा हूं...',
+    hint: 'सिर्फ PDF / CSV / फ़ोटो - वित्तीय सलाह नहीं',
+    fileNote: 'सिर्य इस सेशन के लिए - रिफ़्रेश के बाद दोबारा अटैच करें',
+    statusLabel: 'लाइव',
+    toastNoBackend: 'बैकएंड कॉन्फ़िगर नहीं हुआ',
+    toastFileType: 'सिर्फ PDF, CSV, और इमेज सपोर्टेड हैं',
+    toastFileSize: 'फ़ाइल बहुत बड़ी है - 10MB से कम रखें',
+    toastMicError: 'माइक एरर: ',
+    toastMicUnsupported: 'स्पीच सपोर्ट नहीं है। Chrome आज़माएं।',
+    errorServer: 'सर्वर तक नहीं पहुंच सका। कनेक्शन जांचें।',
+    langChanged: 'भाषा हिंदी में बदल गई',
+    systemLangNote: 'Ab se hamesha Devanagari script mein shuddh Hindi mein jawab do. Roman script bilkul mat use karo.'
+  },
+  hinglish: {
+    modalTitle: 'Welcome to WealthQ',
+    modalDesc: 'Start karne se pehle - main aapko kya bulaaun?',
+    modalNameLabel: 'Aapka Naam',
+    modalNameHint: 'Sirf session track karne ke liye use hoga',
+    modalLangLabel: 'Preferred Language',
+    skipBtn: 'Skip karo',
+    startBtn: 'Shuru karo',
+    tagline: 'Aapka financial thinking partner',
+    emptyTitle: "Apne paison ke baare mein baat karte hain",
+    emptyDesc: "Portfolio share karo, screenshot bhejo, ya bas bata do kya hai - main dekhunga.",
+    chips: ['Mere 6 mutual funds hain', 'Mera FD sahi hai kya?', 'Old vs new tax regime', 'Portfolio review karo'],
+    placeholder: 'Apna portfolio batao...',
+    listening: 'Sun raha hoon...',
+    hint: 'PDF / CSV / Photos only - Financial advice nahi hai yeh',
+    fileNote: 'Sirf is session mein available - refresh ke baad dobara attach karo',
+    statusLabel: 'Live',
+    toastNoBackend: 'Backend configure nahi hua',
+    toastFileType: 'Sirf PDF, CSV, aur images supported hain',
+    toastFileSize: 'File bahut badi hai - 10MB se chhota rakho',
+    toastMicError: 'Mic error: ',
+    toastMicUnsupported: 'Speech support nahi. Chrome try karo.',
+    errorServer: 'Server tak nahi pahucha. Connection check karo.',
+    langChanged: 'Language Hinglish ho gayi',
+    systemLangNote: 'Hamesha Hinglish mein jawab do - Roman script mein Hindi aur English mix karke. Natural aur friendly raho.'
+  }
+};
+
+function t(key) {
+  var lang = config.language || 'english';
+  return (STRINGS[lang] && STRINGS[lang][key]) ? STRINGS[lang][key] : (STRINGS['english'][key] || key);
+}
+
+// ---- PERSISTENT USER ID ----
 function getPersistentUserId() {
   var uid = localStorage.getItem('wealthq_uid');
   if (!uid) {
@@ -204,9 +334,10 @@ function getPersistentUserId() {
 }
 var sessionId = getPersistentUserId();
 
+// ---- HISTORY PERSISTENCE ----
 function saveHistory() {
   try {
-    var toSave = history.map(function(m) {
+    var toSave = chatHistory.map(function(m) {
       if (typeof m.content === 'string') return m;
       var textOnly = [];
       if (Array.isArray(m.content)) {
@@ -224,7 +355,7 @@ function loadHistory() {
     if (!saved) return;
     var parsed = JSON.parse(saved);
     parsed.forEach(function(msg) {
-      history.push(msg);
+      chatHistory.push(msg);
       var text = typeof msg.content === 'string'
         ? msg.content
         : (Array.isArray(msg.content) ? msg.content.map(function(p) { return p.text || ''; }).join(' ') : '[file]');
@@ -233,10 +364,12 @@ function loadHistory() {
   } catch(e) {}
 }
 
+// ---- CONFIG ----
 function loadConfig() {
   try {
     var saved = JSON.parse(localStorage.getItem('wealthq_config') || '{}');
     config.testerName = saved.testerName || '';
+    config.language = saved.language || 'english';
     if (saved.sheetsUrl) config.sheetsUrl = saved.sheetsUrl;
   } catch(e) {}
 }
@@ -245,13 +378,98 @@ function saveConfig() {
   localStorage.setItem('wealthq_config', JSON.stringify(config));
 }
 
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(function() { t.classList.remove('show'); }, 2500);
+// ---- APPLY LANGUAGE TO UI ----
+function applyLanguage(lang) {
+  config.language = lang;
+  saveConfig();
+
+  // Update header toggle
+  document.querySelectorAll('.lang-toggle .lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+  });
+
+  // Update static UI text
+  document.getElementById('brand-tagline').textContent = t('tagline');
+  document.getElementById('status-label').textContent = t('statusLabel');
+  document.getElementById('input-hint').textContent = t('hint');
+  document.getElementById('file-session-note').textContent = t('fileNote');
+  document.getElementById('user-input').placeholder = t('placeholder');
+
+  // Update empty state if still visible
+  var emptyTitle = document.getElementById('empty-title');
+  var emptyDesc = document.getElementById('empty-desc');
+  if (emptyTitle) emptyTitle.textContent = t('emptyTitle');
+  if (emptyDesc) emptyDesc.textContent = t('emptyDesc');
+
+  // Update chips
+  var chipsContainer = document.getElementById('chips-container');
+  if (chipsContainer) {
+    chipsContainer.innerHTML = '';
+    t('chips').forEach(function(chipText) {
+      var chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = chipText;
+      chip.onclick = function() { useChip(chip); };
+      chipsContainer.appendChild(chip);
+    });
+  }
+
+  // Update modal text
+  document.getElementById('modal-title').textContent = t('modalTitle');
+  document.getElementById('modal-desc').textContent = t('modalDesc');
+  document.getElementById('modal-name-label').textContent = t('modalNameLabel');
+  document.getElementById('modal-name-hint').textContent = t('modalNameHint');
+  document.getElementById('modal-lang-label').textContent = t('modalLangLabel');
+  document.getElementById('skip-btn').textContent = t('skipBtn');
+  document.getElementById('save-btn').textContent = t('startBtn');
 }
 
+function switchLang(lang) {
+  applyLanguage(lang);
+  showToast(t('langChanged'));
+  // Inject a system note into conversation so bot knows to switch
+  if (chatHistory.length > 0) {
+    chatHistory.push({ role: 'user', content: '[Language preference changed to: ' + lang + '. ' + t('systemLangNote') + ']' });
+    chatHistory.push({ role: 'assistant', content: t('langChanged') + '.' });
+  }
+}
+
+function selectLang(el) {
+  document.querySelectorAll('.lang-option').forEach(function(opt) { opt.classList.remove('selected'); });
+  el.classList.add('selected');
+  selectedLangInModal = el.getAttribute('data-lang');
+  applyLanguage(selectedLangInModal);
+}
+
+// ---- TOAST ----
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2500);
+}
+
+// ---- MODAL ----
+function dismissModal() {
+  config.language = selectedLangInModal;
+  applyLanguage(selectedLangInModal);
+  saveConfig();
+  document.getElementById('config-modal').classList.add('hidden');
+  loadHistory();
+}
+
+document.getElementById('save-btn').addEventListener('click', function() {
+  var name = document.getElementById('cfg-tester').value.trim();
+  config.testerName = name || 'anonymous';
+  dismissModal();
+});
+
+document.getElementById('skip-btn').addEventListener('click', function() {
+  config.testerName = 'anonymous';
+  dismissModal();
+});
+
+// ---- RENDER ----
 function removeEmptyState() {
   var es = document.getElementById('empty-state');
   if (es) es.remove();
@@ -290,10 +508,11 @@ function showTyping() {
 }
 
 function removeTyping() {
-  var t = document.getElementById('typing-indicator');
-  if (t) t.remove();
+  var el = document.getElementById('typing-indicator');
+  if (el) el.remove();
 }
 
+// ---- FILE ATTACHMENT ----
 var ALLOWED_TYPES = {
   'application/pdf': { label: 'PDF', icon: '[PDF]', type: 'document' },
   'text/csv':        { label: 'CSV', icon: '[CSV]', type: 'text' },
@@ -310,8 +529,8 @@ function handleFileSelect(event) {
   var isCSV = file.name.toLowerCase().endsWith('.csv');
   var mimeType = isCSV ? 'text/csv' : file.type;
   var allowed = ALLOWED_TYPES[mimeType];
-  if (!allowed) { showToast('Only PDF, CSV, and images are supported'); event.target.value = ''; return; }
-  if (file.size > 10 * 1024 * 1024) { showToast('File too large - please keep it under 10MB'); event.target.value = ''; return; }
+  if (!allowed) { showToast(t('toastFileType')); event.target.value = ''; return; }
+  if (file.size > 10 * 1024 * 1024) { showToast(t('toastFileSize')); event.target.value = ''; return; }
   var reader = new FileReader();
   reader.onload = function(e) {
     var base64 = e.target.result.split(',')[1];
@@ -329,6 +548,7 @@ function removeFile() {
   document.getElementById('file-preview').classList.add('hidden');
 }
 
+// ---- SHEETS LOGGING ----
 function logToSheets(userMessage, botReply) {
   if (!config.sheetsUrl) return;
   fetch(config.sheetsUrl, {
@@ -338,12 +558,14 @@ function logToSheets(userMessage, botReply) {
   }).catch(function(e) { console.warn('Sheets logging failed:', e); });
 }
 
+// ---- CHIPS ----
 function useChip(el) {
   document.getElementById('user-input').value = el.textContent;
   autoResize(document.getElementById('user-input'));
   document.getElementById('user-input').focus();
 }
 
+// ---- TEXTAREA ----
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 120) + 'px';
@@ -353,18 +575,25 @@ function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
+// ---- SEND MESSAGE ----
 function sendMessage() {
   var input = document.getElementById('user-input');
   var text = input.value.trim();
   if (!text && !pendingFile) return;
-  if (!BACKEND_URL) { showToast('Backend not configured'); return; }
+  if (!BACKEND_URL) { showToast(t('toastNoBackend')); return; }
+
   var fileToSend = pendingFile;
   input.value = '';
   autoResize(input);
   document.getElementById('send-btn').disabled = true;
   if (fileToSend) removeFile();
-  var displayText = fileToSend ? (text ? text + ' ' + fileToSend.icon + ' ' + fileToSend.name : fileToSend.icon + ' ' + fileToSend.name) : text;
+
+  var displayText = fileToSend
+    ? (text ? text + ' ' + fileToSend.icon + ' ' + fileToSend.name : fileToSend.icon + ' ' + fileToSend.name)
+    : text;
+
   appendMessage('user', displayText);
+
   var messageContent;
   if (fileToSend) {
     messageContent = [];
@@ -380,38 +609,96 @@ function sendMessage() {
   } else {
     messageContent = text;
   }
-  history.push({ role: 'user', content: messageContent });
+
+  // Add language instruction to first message or on language change
+  var langNote = t('systemLangNote');
+  var messagesWithLang = chatHistory.slice();
+  if (messagesWithLang.length === 0) {
+    messagesWithLang = [{ role: 'user', content: langNote + '\n\n' + (typeof messageContent === 'string' ? messageContent : JSON.stringify(messageContent)) }];
+    chatHistory.push({ role: 'user', content: messageContent });
+  } else {
+    chatHistory.push({ role: 'user', content: messageContent });
+    messagesWithLang = chatHistory.slice();
+  }
+
   showTyping();
+
+  // Show "waking up" toast after 5s on first message (Render free tier cold start)
+  var wakeToastTimer = null;
+  if (history.length <= 2) {
+    wakeToastTimer = setTimeout(function() {
+      showToast('Server is waking up - first message may take 30s...');
+    }, 5000);
+  }
+
   fetch(BACKEND_URL + '/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: history, sessionId: sessionId, testerName: config.testerName || 'anonymous' })
+    body: JSON.stringify({
+      messages: messagesWithLang,
+      sessionId: sessionId,
+      testerName: config.testerName || 'anonymous',
+      language: config.language
+    })
   })
-  .then(function(res) { return res.json(); })
+  .then(function(res) {
+    if (wakeToastTimer) clearTimeout(wakeToastTimer);
+    return res.json();
+  })
   .then(function(data) {
-    if (data.error) { removeTyping(); appendMessage('bot', 'Error: ' + (data.error || 'Something went wrong.')); document.getElementById('send-btn').disabled = false; return; }
+    if (data.error) {
+      removeTyping();
+      appendMessage('bot', 'Error: ' + (data.error || 'Something went wrong.'));
+      document.getElementById('send-btn').disabled = false;
+      return;
+    }
     var reply = data.reply;
     removeTyping();
     appendMessage('bot', reply);
-    history.push({ role: 'assistant', content: reply });
+    chatHistory.push({ role: 'assistant', content: reply });
     logToSheets(displayText, reply);
     saveHistory();
   })
-  .catch(function(err) { removeTyping(); appendMessage('bot', 'Could not reach the server. Check your connection.'); console.error(err); })
-  .finally(function() { document.getElementById('send-btn').disabled = false; input.focus(); });
+  .catch(function(err) {
+    removeTyping();
+    if (err.name === 'AbortError') {
+      appendMessage('bot', 'The server took too long to respond. This can happen when it has been idle. Please try sending your message again.');
+    } else {
+      appendMessage('bot', t('errorServer'));
+    }
+    console.error(err);
+  })
+  .finally(function() {
+    document.getElementById('send-btn').disabled = false;
+    input.focus();
+  });
 }
 
+// ---- MIC ----
 function toggleMic() {
-  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) { showToast('Speech not supported. Try Chrome.'); return; }
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    showToast(t('toastMicUnsupported'));
+    return;
+  }
   if (isListening) { recognition.stop(); return; }
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SR();
-  recognition.lang = 'en-IN';
+  recognition.lang = config.language === 'hindi' ? 'hi-IN' : 'en-IN';
   recognition.interimResults = true;
   recognition.continuous = false;
-  recognition.onstart = function() { isListening = true; document.getElementById('mic-btn').classList.add('listening'); document.getElementById('user-input').placeholder = 'Listening...'; };
-  recognition.onresult = function(e) { var t = ''; for (var i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; var inp = document.getElementById('user-input'); inp.value = t; autoResize(inp); };
-  recognition.onerror = function(e) { showToast('Mic error: ' + e.error); stopMic(); };
+  recognition.onstart = function() {
+    isListening = true;
+    document.getElementById('mic-btn').classList.add('listening');
+    document.getElementById('user-input').placeholder = t('listening');
+  };
+  recognition.onresult = function(e) {
+    var txt = '';
+    for (var i = 0; i < e.results.length; i++) txt += e.results[i][0].transcript;
+    var inp = document.getElementById('user-input');
+    inp.value = txt;
+    autoResize(inp);
+  };
+  recognition.onerror = function(e) { showToast(t('toastMicError') + e.error); stopMic(); };
   recognition.onend = function() { stopMic(); };
   recognition.start();
 }
@@ -419,30 +706,23 @@ function toggleMic() {
 function stopMic() {
   isListening = false;
   document.getElementById('mic-btn').classList.remove('listening');
-  document.getElementById('user-input').placeholder = 'Tell me about your portfolio...';
+  document.getElementById('user-input').placeholder = t('placeholder');
 }
 
+// ---- INIT ----
 loadConfig();
+applyLanguage(config.language);
+
+// Set correct lang option selected in modal
+document.querySelectorAll('.lang-option').forEach(function(opt) {
+  opt.classList.toggle('selected', opt.getAttribute('data-lang') === config.language);
+});
+selectedLangInModal = config.language;
+
 if (config.testerName && config.testerName !== 'anonymous') {
   document.getElementById('config-modal').classList.add('hidden');
   loadHistory();
-} else {
-  document.getElementById('save-btn').addEventListener('click', function() { loadHistory(); }, { once: true });
-  document.getElementById('skip-btn').addEventListener('click', function() { loadHistory(); }, { once: true });
 }
-
-document.getElementById('save-btn').addEventListener('click', function() {
-  var name = document.getElementById('cfg-tester').value.trim();
-  config.testerName = name || 'anonymous';
-  saveConfig();
-  document.getElementById('config-modal').classList.add('hidden');
-});
-
-document.getElementById('skip-btn').addEventListener('click', function() {
-  config.testerName = 'anonymous';
-  saveConfig();
-  document.getElementById('config-modal').classList.add('hidden');
-});
 </script>
 </body>
 </html>
